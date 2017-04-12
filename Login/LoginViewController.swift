@@ -15,9 +15,23 @@ class LoginViewController: UIViewController {
         static let backgroundColor: UIColor = UIColor(hue: 0.5389, saturation: 1, brightness: 0.92, alpha: 1.0)
         static let invalidEmailTitle = "Invalid username or password"
         static let invalidEmailMessage = "Please try again"
+        static let buttonCornerRadius: CGFloat = 10
     }
+    
+    
+    var emailField = UITextField(frame: CGRect(x:0, y:0, width: 0, height: 0))
+    var passwordField = UITextField(frame: CGRect(x:0, y:0, width: 0, height: 0))
 
     // TODO: instantiate the views needed for your project
+    
+    let mainFrame = CGRect(x: UIScreen.main.bounds.width * 0.05, y: 0,
+                         width: UIScreen.main.bounds.width * 0.9,
+                         height: UIScreen.main.bounds.height)
+    
+    let loginFrame = CGRect(x: UIScreen.main.bounds.width * 0.2, y: 0,
+                           width: UIScreen.main.bounds.width * 0.9,
+                           height: UIScreen.main.bounds.height * 0.2)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +39,79 @@ class LoginViewController: UIViewController {
         
         // TODO: Add your views either as subviews of `view` or subviews of each other using `addSubview`
         
+        let labelFrame = CGRect(x:0, y:0, width: mainFrame.width-40, height: 40)
+        
+        let loginLabel = UILabel(frame: labelFrame)
+        loginLabel.textColor = UIColor.white
+        loginLabel.backgroundColor = Constants.backgroundColor
+        loginLabel.font = UIFont(name: "GillSans", size: 40)
+        loginLabel.text = "Login View Controller"
+        loginLabel.translatesAutoresizingMaskIntoConstraints = false
+        let constraint1 = view.topAnchor.constraint(equalTo: loginLabel.topAnchor, constant: UIScreen.main.bounds.height * -0.3)
+        let constraintCenterLabel = loginLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        
+        
+        let loginView = UIView(frame: loginFrame)
+        loginView.center = view.center
+        loginView.backgroundColor = UIColor.white
+        loginView.layer.cornerRadius = Constants.buttonCornerRadius
+        
+        
+        let textFrame = CGRect(x:0, y:0, width: loginView.bounds.width*0.95, height: 20)
+        
+        emailField = UITextField(frame: textFrame)
+        emailField.placeholder = "berkeley.edu account"
+        emailField.translatesAutoresizingMaskIntoConstraints = false
+        let constraintTopEmail = loginView.topAnchor.constraint(equalTo: emailField.topAnchor, constant: -20)
+        let constraintLeftEmail = emailField.leadingAnchor.constraint(equalTo: loginView.leadingAnchor, constant: 10)
+
+        
+        passwordField = UITextField(frame: textFrame)
+        passwordField.placeholder = "Password"
+        passwordField.translatesAutoresizingMaskIntoConstraints = false
+        let constraintTopPassword = passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 10)
+        let constraintLeftPassword = passwordField.leadingAnchor.constraint(equalTo: loginView.leadingAnchor, constant: 10)
+        
+        let buttonFrame = CGRect(x:0, y:0, width: loginView.bounds.width, height: 20)
+        
+        let loginButton = UIButton(frame: buttonFrame)
+        loginButton.addTarget(self, action: #selector(clickedLogin), for: .touchUpInside)
+        
+        loginButton.setTitle("Login", for: .normal)
+        loginButton.backgroundColor = Constants.backgroundColor
+        loginButton.setTitleColor(UIColor.white, for: .normal)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.layer.cornerRadius = Constants.buttonCornerRadius
+        let constraintTopButton = loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 10)
+        let constraintCenterButton = loginButton.centerXAnchor.constraint(equalTo: loginView.centerXAnchor)
+        let constraintWidthButton = loginButton.widthAnchor.constraint(equalToConstant: loginView.bounds.width * 0.5)
+        
+        
+        view.addSubview(loginLabel)
+        view.addSubview(loginView)
+        view.addSubview(emailField)
+        view.addSubview(passwordField)
+        view.addSubview(loginButton)
+        
+        constraint1.isActive = true
+        constraintCenterLabel.isActive = true
+        constraintLeftEmail.isActive = true
+        constraintTopEmail.isActive = true
+        constraintTopPassword.isActive = true
+        constraintLeftPassword.isActive = true
+        constraintTopButton.isActive = true
+        constraintCenterButton.isActive = true
+        constraintWidthButton.isActive = true
         // TODO: layout your views using frames or AutoLayout
+        
     }
     
     // TODO: create an IBAction for your login button
-    
+    @IBAction func clickedLogin(sender: UIButton) {
+        print(emailField.text ?? "")
+        print(passwordField.text ?? "")
+        authenticateUser(username: emailField.text, password: passwordField.text)
+    }
     
     
     
